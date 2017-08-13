@@ -28,7 +28,8 @@
  Topological sort could also be done via BFS.
  */
 
-// dfs 也是《算法》上的方法
+// dfs 也是《算法》上的方法，也是拓扑排序的dfs方法
+// http://blog.csdn.net/qinzhaokun/article/details/48541117 介绍了拓扑排序的两种方法：dfs方法和Kahn法
 class Solution {
     var onPath = [Bool]()
     var visited = [Bool]()
@@ -38,6 +39,7 @@ class Solution {
         guard prerequisites.count > 0, prerequisites[0].count > 0 else {
             return true
         }
+        // make graph
         var graph = Array<Array<Int>>(repeating: [], count: numCourses)
         for pair in prerequisites {
             var temp = graph[pair[1]]
@@ -72,3 +74,49 @@ class Solution {
         onPath[node] = false
     }
 }
+
+// Kahn法
+class Solution1 {
+    func canFinish(_ numCourses: Int, _ prerequisites: [[Int]]) -> Bool {
+        guard prerequisites.count > 0, prerequisites[0].count > 0 else {
+            return true
+        }
+        // make graph
+        var graph = Array<Array<Int>>(repeating: [], count: numCourses)
+        for pair in prerequisites {
+            var temp = graph[pair[1]]
+            temp.append(pair[0])
+            graph[pair[1]] = temp
+        }
+        
+        // compute indegree
+        var indegrees = Array<Int>(repeating: 0, count: numCourses)
+        var topoResultCount = 0 // 拓扑序列中元素个数
+        var queue = [Int]()
+        for neighs in graph {
+            for neigh in neighs {
+                indegrees[neigh] += 1
+            }
+        }
+        
+        for i in 0..<indegrees.count {
+            if indegrees[i] == 0 {
+                queue.append(i)
+            }
+        }
+        while !queue.isEmpty {
+            let node = queue.removeFirst()
+            topoResultCount += 1
+            for neigh in graph[node] {
+                indegrees[neigh] -= 1
+                if indegrees[neigh] == 0 {
+                    queue.append(neigh)
+                }
+            }
+        }
+        return topoResultCount == numCourses
+    }
+}
+
+Solution().canFinish(2, [[1,0]])
+Solution1().canFinish(2, [[1,0]])
