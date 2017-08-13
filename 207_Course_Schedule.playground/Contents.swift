@@ -1,6 +1,8 @@
 /*
  207. Course Schedule
  
+ https://leetcode.com/problems/course-schedule/description/
+ 
  There are a total of n courses you have to take, labeled from 0 to n - 1.
  
  Some courses may have prerequisites, for example to take course 0 you have to first take course 1, which is expressed as a pair: [0,1]
@@ -26,8 +28,47 @@
  Topological sort could also be done via BFS.
  */
 
+// dfs 也是《算法》上的方法
 class Solution {
+    var onPath = [Bool]()
+    var visited = [Bool]()
+    var hasCycle = false
+    
     func canFinish(_ numCourses: Int, _ prerequisites: [[Int]]) -> Bool {
-        
+        guard prerequisites.count > 0, prerequisites[0].count > 0 else {
+            return true
+        }
+        var graph = Array<Array<Int>>(repeating: [], count: numCourses)
+        for pair in prerequisites {
+            var temp = graph[pair[1]]
+            temp.append(pair[0])
+            graph[pair[1]] = temp
+        }
+        onPath = Array<Bool>(repeating: false, count: numCourses)
+        visited = Array<Bool>(repeating: false, count: numCourses)
+        for i in 0..<numCourses {
+            if !visited[i] {
+                dfs(graph, i)
+            }
+        }
+        return !hasCycle
+    }
+    
+    private func dfs(_ graph: [[Int]], _ node: Int) {
+        if hasCycle {
+            return
+        }
+        onPath[node] = true
+        visited[node] = true
+        for neigh in graph[node] {
+            if onPath[neigh] {
+                hasCycle = true
+                return
+            }
+            if !visited[neigh] {
+                dfs(graph, neigh)
+            }
+        }
+        onPath[node] = false
     }
 }
