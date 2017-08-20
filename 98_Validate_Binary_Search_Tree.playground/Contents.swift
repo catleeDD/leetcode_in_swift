@@ -33,8 +33,63 @@ public class TreeNode {
     }
 }
 
+// inorder
 class Solution {
+    var list = [Int]()
     func isValidBST(_ root: TreeNode?) -> Bool {
-        
+        guard let root = root else { return true }
+        if !isValidBST(root.left) {
+            return false
+        }
+        if list.count == 0 || root.val > list.last! {
+            list.append(root.val)
+        } else {
+            return false
+        }
+        if !isValidBST(root.right) {
+            return false
+        }
+        return true
+    }
+}
+
+// inorder stack
+class Solution1 {
+    func isValidBST(_ root: TreeNode?) -> Bool {
+        var pre = Int.min
+        var stack = [TreeNode]()
+        var root: TreeNode? = root
+        while root != nil || !stack.isEmpty {
+            while let node = root {
+                stack.append(node)
+                root = node.left
+            }
+            let node = stack.popLast()!
+            if pre == Int.min || node.val > pre {
+                pre = node.val
+            } else {
+                return false
+            }
+            root = node.right
+        }
+        return true
+    }
+}
+
+//
+class Solution2 {
+    func isValidBST(_ root: TreeNode?) -> Bool {
+        return valid(root, nil, nil)
+    }
+    
+    private func valid(_ root: TreeNode?, _ min: TreeNode?, _ max: TreeNode?) -> Bool {
+        guard let root = root else { return true }
+        if let min = min, root.val <= min.val {
+            return false
+        }
+        if let max = max, root.val >= max.val {
+            return false
+        }
+        return valid(root.left, min, root) && valid(root.right, root, max)
     }
 }
