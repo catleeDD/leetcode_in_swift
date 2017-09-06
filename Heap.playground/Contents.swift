@@ -5,7 +5,7 @@
  */
 public struct Heap<T> {
     var elements = [T]()
-
+    
     fileprivate var order: (T, T) -> Bool
     
     public init(order: @escaping (T, T) -> Bool) {
@@ -66,7 +66,7 @@ public struct Heap<T> {
     
     mutating func sink(_ index: Int) {
         var parentIndex = index
-        while 2*parentIndex + 2 < elements.count {
+        while 2*parentIndex + 2 <= elements.count {
             let leftChildIndex = 2*parentIndex + 1
             let rightChildIndex = 2*parentIndex + 2
             
@@ -102,7 +102,7 @@ public struct Heap<T> {
 
 class HeapSort {
     func sort(_ array: inout [Int]) {
-        var heap = Heap<Int>(array: array, order: >)
+        var heap = Heap<Int>(array: array, order: <)
         for i in 0..<array.count {
             array[i] = heap.remove()!
         }
@@ -144,3 +144,4 @@ class HeapSort {
 var array = [2,3,4,6,1,2,8,0]
 //HeapSort().sort(&array)
 HeapSort().sortInPlace(&array)
+HeapSort().sort(&array)
