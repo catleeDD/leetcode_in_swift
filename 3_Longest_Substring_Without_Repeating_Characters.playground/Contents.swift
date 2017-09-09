@@ -37,6 +37,9 @@ class Solution {
     }
 }
 
+// 以下三种方法是substring的标准方法：sliding window + two points
+// 只是用来表示sliding window的方式有set，map和字母array三种。具体可以看leetcode的Solution
+
 //O(n) set
 class Solution1 {
     func lengthOfLongestSubstring(_ s: String) -> Int {
@@ -47,8 +50,8 @@ class Solution1 {
         while j < chars.count {
             if !set.contains(chars[j]) {
                 set.insert(chars[j])
+                maxCount = max(maxCount, j - i + 1)
                 j += 1
-                maxCount = max(maxCount, set.count)
             } else {
                 set.remove(chars[i])
                 i += 1
@@ -59,47 +62,62 @@ class Solution1 {
     }
 }
 
-//O(n) 跟 1 一样，但更好理解一点
+//O(n) map
+// map和下面的array比set的优点是可以记录索引，所以i可以直接跳到对应的索引而不用一个一个往右走。
+// 所以上面的算法复杂度是2n，下面两个是n
 class Solution2 {
     func lengthOfLongestSubstring(_ s: String) -> Int {
         var maxCount = 0
         let chars = Array(s.characters)
-        var i = 0
-        var set = Set<Character>()
-        for j in 0..<chars.count {
-            if !set.contains(chars[j]) {
-                set.insert(chars[j])
-                maxCount = max(maxCount, set.count)
-            } else {
-                while set.contains(chars[j]) {
-                    set.remove(chars[i])
-                    i += 1
-                }
-            }
-        }
-        
-        return maxCount
-    }
-}
-
-//O(n) map
-class Solution3 {
-    func lengthOfLongestSubstring(_ s: String) -> Int {
-        var maxCount = 0
-        let chars = Array(s.characters)
-        var i = 0
+        var i = 0, j = 0
         var map = [Character: Int]()
-        for j in 0..<chars.count {
+        while j < chars.count {
             if map.keys.contains(chars[j]) {
                 i = max(i, map[chars[j]]! + 1)
             }
             map[chars[j]] = j
             maxCount = max(maxCount, j - i + 1)
+            j += 1
         }
         
         return maxCount
     }
 }
 
+//O(n) 字母表array
+//int[26] for Letters 'a' - 'z' or 'A' - 'Z'
+//int[128] for ASCII
+//int[256] for Extended ASCII
+class Solution3 {
+    func lengthOfLongestSubstring(_ s: String) -> Int {
+        var maxCount = 0
+        let chars = Array(s.characters)
+        var i = 0, j = 0
+        var index = Array<Int>(repeating: -1, count: 128)
+        while j < chars.count {
+            if index[chars[j].toInt()] >= 0 {
+                i = max(i, index[chars[j].toInt()] + 1)
+            }
+            index[chars[j].toInt()] = j
+            maxCount = max(maxCount, j - i + 1)
+            j += 1
+        }
+        
+        return maxCount
+    }
+}
+
+extension Character
+{
+    func toInt() -> Int
+    {
+        var intFromCharacter:Int = 0
+        for scalar in String(self).unicodeScalars
+        {
+            intFromCharacter = Int(scalar.value)
+        }
+        return intFromCharacter
+    }
+}
 
 Solution3().lengthOfLongestSubstring("jbpnbwwd")
