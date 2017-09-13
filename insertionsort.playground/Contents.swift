@@ -43,6 +43,9 @@ func insertionSort_generic<T>(_ array: [T], _ isOrderedBefore: (T, T) -> Bool) -
     return a
 }
 
+// 插入排序包括直接插入排序，二分插入排序（折半插入排序），希尔排序 http://blog.chinaunix.net/uid-28894229-id-4625483.html
+// http://wiki.jikexueyuan.com/project/data-structure-sorting/ 这个网站总结了所有的排序
+
 
 let list = [ 10, 0, 3, 9, 2, 14, 8 ]
 insertionsort(list)
