@@ -33,8 +33,8 @@ extension Character
 class Solution {
     func minWindow(_ s: String, _ t: String) -> String {
         var minCount = Int.max, head = 0
-        let s = Array(s.characters)
-        let t = Array(t.characters)
+        let s = Array(s)
+        let t = Array(t)
         var i = 0, j = 0, count = t.count
         var counts = Array<Int>(repeating: 0, count: 128)
         t.forEach { (c) in

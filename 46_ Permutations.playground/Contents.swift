@@ -21,6 +21,10 @@
 // 这道题可以参考 78. Subsets，有相似之处
 // 一共有n！个
 
+// 标准做法是backtrack
+// https://leetcode.com/problems/permutations/discuss/18239/A-general-approach-to-backtracking-questions-in-Java-(Subsets-Permutations-Combination-Sum-Palindrome-Partioning)
+
+// 下面做法不是很标准
 class Solution {
     private var result = [[Int]]()
     func permute(_ nums: [Int]) -> [[Int]] {

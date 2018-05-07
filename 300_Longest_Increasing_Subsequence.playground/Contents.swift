@@ -30,6 +30,7 @@ class Solution {
             }
             result = max(dp[i], result)
         }
+        
         return result
     }
 }
