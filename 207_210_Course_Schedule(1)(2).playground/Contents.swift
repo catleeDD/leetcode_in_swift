@@ -120,3 +120,9 @@ class Solution1 {
 
 Solution().canFinish(2, [[1,0]])
 Solution1().canFinish(2, [[1,0]])
+
+
+// 进阶 课程表2 就是把拓扑排序打印出来
+// https://leetcode-cn.com/problems/course-schedule-ii/solution/ke-cheng-biao-ii-by-leetcode/
+
+
